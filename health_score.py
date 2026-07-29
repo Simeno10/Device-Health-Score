@@ -106,4 +106,3 @@ if __name__ == "__main__":
         for recommendation in result["recommendations"]:
             print(f" - {recommendation}")
 `
-     
