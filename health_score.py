@@ -7,7 +7,7 @@ Score range: 0-100
 """
 
 from dataclasses import dataclass
-
+from datetime import datetime
 
 @dataclass
 class DeviceState:
@@ -76,11 +76,12 @@ def calculate_health_score(device: DeviceState) -> dict:
         status = "CRITICAL"
 
     return {
-        "health_score": score,
-        "status": status,
-        "issues": issues,
-        "recommendations": get_recommendations(issues)
-    }
+    "timestamp": datetime.utcnow().isoformat(),
+    "health_score": score,
+    "status": status,
+    "issues": issues,
+    "recommendations": get_recommendations(issues)
+}
 
 
 if __name__ == "__main__":
