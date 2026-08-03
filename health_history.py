@@ -45,3 +45,4 @@ if __name__ == "__main__":
     print("Average:", result["average_score"])
     print("Highest:", result["highest_score"])
     print("Lowest:", result["lowest_score"])
+
