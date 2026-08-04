@@ -106,5 +106,9 @@ if __name__ == "__main__":
         print("\nRecommendations:")
         for recommendation in result["recommendations"]:
             print(f" - {recommendation}")
-`
+            
+from health_report import generate_report
+
+print()
+print(generate_report(result))
 
