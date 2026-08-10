@@ -1,0 +1,15 @@
+battery:
+  critical: 10
+  warning: 20
+
+storage:
+  critical: 2
+  warning: 5
+
+penalties:
+  battery_critical: 30
+  battery_warning: 15
+  network_unavailable: 20
+  storage_critical: 25
+  storage_warning: 10
+  gps_disabled: 10
