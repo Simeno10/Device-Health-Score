@@ -6,7 +6,6 @@ Tracks device health score history and trend.
 
 from statistics import mean
 
-
 def calculate_trend(scores):
     if len(scores) < 2:
         return "INSUFFICIENT_DATA"
