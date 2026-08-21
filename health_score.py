@@ -7,6 +7,7 @@ Calculates:
 - Health Score (0-100)
 - Status
 - Grade
+- Risk Level
 - Detected Issues
 - Recommendations
 """
@@ -24,10 +25,6 @@ class DeviceState:
 
 
 def get_health_grade(score: int) -> str:
-    """
-    Converts numerical score into letter grade.
-    """
-
     if score >= 90:
         return "A"
 
@@ -43,11 +40,24 @@ def get_health_grade(score: int) -> str:
     return "F"
 
 
-def get_recommendations(issues):
+def get_risk_level(score: int) -> str:
     """
-    Generates recommendations based on detected issues.
+    Determines operational risk based on score.
     """
 
+    if score >= 90:
+        return "LOW"
+
+    if score >= 70:
+        return "MEDIUM"
+
+    if score >= 50:
+        return "HIGH"
+
+    return "CRITICAL"
+
+
+def get_recommendations(issues):
     mapping = {
         "Critical battery level": "Charge the device immediately.",
         "Low battery level": "Consider charging the device soon.",
@@ -67,14 +77,11 @@ def get_recommendations(issues):
 
 
 def calculate_health_score(device: DeviceState) -> dict:
-    """
-    Calculates an overall health score for a device.
-    """
 
     score = 100
     issues = []
 
-    # Battery checks
+    # Battery
     if device.battery_percent < 10:
         score -= 30
         issues.append("Critical battery level")
@@ -83,12 +90,12 @@ def calculate_health_score(device: DeviceState) -> dict:
         score -= 15
         issues.append("Low battery level")
 
-    # Network checks
+    # Network
     if not device.network_available:
         score -= 20
         issues.append("Network unavailable")
 
-    # Storage checks
+    # Storage
     if device.free_storage_gb < 2:
         score -= 25
         issues.append("Critical storage space")
@@ -97,14 +104,13 @@ def calculate_health_score(device: DeviceState) -> dict:
         score -= 10
         issues.append("Low storage space")
 
-    # GPS checks
+    # GPS
     if not device.gps_enabled:
         score -= 10
         issues.append("GPS disabled")
 
     score = max(score, 0)
 
-    # Device status
     if score >= 90:
         status = "HEALTHY"
 
@@ -118,6 +124,7 @@ def calculate_health_score(device: DeviceState) -> dict:
         "timestamp": datetime.utcnow().isoformat(),
         "health_score": score,
         "health_grade": get_health_grade(score),
+        "risk_level": get_risk_level(score),
         "status": status,
         "issues": issues,
         "recommendations": get_recommendations(issues)
@@ -142,6 +149,7 @@ if __name__ == "__main__":
     print(f"Timestamp    : {result['timestamp']}")
     print(f"Health Score : {result['health_score']}")
     print(f"Health Grade : {result['health_grade']}")
+    print(f"Risk Level   : {result['risk_level']}")
     print(f"Status       : {result['status']}")
 
     print("\nIssues:")
@@ -161,4 +169,3 @@ if __name__ == "__main__":
         print(" - None")
 
     print("=" * 50)
-
