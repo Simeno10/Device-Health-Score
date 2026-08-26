@@ -5,10 +5,11 @@ Device Health Score Engine
 
 Calculates:
 - Health Score (0-100)
-- Status
-- Grade
+- Health Grade (A-F)
 - Risk Level
-- Detected Issues
+- Reliability Score
+- Device Status
+- Issues
 - Recommendations
 """
 
@@ -25,6 +26,10 @@ class DeviceState:
 
 
 def get_health_grade(score: int) -> str:
+    """
+    Converts score into letter grade.
+    """
+
     if score >= 90:
         return "A"
 
@@ -42,7 +47,7 @@ def get_health_grade(score: int) -> str:
 
 def get_risk_level(score: int) -> str:
     """
-    Determines operational risk based on score.
+    Calculates risk level.
     """
 
     if score >= 90:
@@ -57,7 +62,21 @@ def get_risk_level(score: int) -> str:
     return "CRITICAL"
 
 
+def get_reliability_score(issue_count: int) -> int:
+    """
+    Reliability decreases with issue count.
+    """
+
+    reliability = 100 - (issue_count * 15)
+
+    return max(reliability, 0)
+
+
 def get_recommendations(issues):
+    """
+    Generates recommendations for detected issues.
+    """
+
     mapping = {
         "Critical battery level": "Charge the device immediately.",
         "Low battery level": "Consider charging the device soon.",
@@ -77,6 +96,9 @@ def get_recommendations(issues):
 
 
 def calculate_health_score(device: DeviceState) -> dict:
+    """
+    Main engine.
+    """
 
     score = 100
     issues = []
@@ -120,11 +142,14 @@ def calculate_health_score(device: DeviceState) -> dict:
     else:
         status = "CRITICAL"
 
+    reliability_score = get_reliability_score(len(issues))
+
     return {
         "timestamp": datetime.utcnow().isoformat(),
         "health_score": score,
         "health_grade": get_health_grade(score),
         "risk_level": get_risk_level(score),
+        "reliability_score": reliability_score,
         "status": status,
         "issues": issues,
         "recommendations": get_recommendations(issues)
@@ -142,15 +167,16 @@ if __name__ == "__main__":
 
     result = calculate_health_score(device)
 
-    print("=" * 50)
+    print("=" * 60)
     print("DEVICE HEALTH REPORT")
-    print("=" * 50)
+    print("=" * 60)
 
-    print(f"Timestamp    : {result['timestamp']}")
-    print(f"Health Score : {result['health_score']}")
-    print(f"Health Grade : {result['health_grade']}")
-    print(f"Risk Level   : {result['risk_level']}")
-    print(f"Status       : {result['status']}")
+    print(f"Timestamp         : {result['timestamp']}")
+    print(f"Health Score      : {result['health_score']}")
+    print(f"Health Grade      : {result['health_grade']}")
+    print(f"Risk Level        : {result['risk_level']}")
+    print(f"Reliability Score : {result['reliability_score']}")
+    print(f"Status            : {result['status']}")
 
     print("\nIssues:")
 
@@ -168,4 +194,4 @@ if __name__ == "__main__":
     else:
         print(" - None")
 
-    print("=" * 50)
+    print("=" * 60)
