@@ -179,6 +179,12 @@ print(result)
 
 ---
 
+Architecture Overview
+├── Mobile Client
+├── Backend APIs
+├── Test Automation
+└── Release Process
+
 ## License
 
 MIT License
