@@ -4,12 +4,12 @@ health_score.py
 Device Health Score Engine
 
 Calculates:
-- Health Score (0-100)
-- Health Grade (A-F)
+- Health Score
+- Health Grade
 - Risk Level
 - Reliability Score
+- Health Category
 - Device Status
-- Issues
 - Recommendations
 """
 
@@ -26,9 +26,6 @@ class DeviceState:
 
 
 def get_health_grade(score: int) -> str:
-    """
-    Converts score into letter grade.
-    """
 
     if score >= 90:
         return "A"
@@ -46,9 +43,6 @@ def get_health_grade(score: int) -> str:
 
 
 def get_risk_level(score: int) -> str:
-    """
-    Calculates risk level.
-    """
 
     if score >= 90:
         return "LOW"
@@ -62,10 +56,24 @@ def get_risk_level(score: int) -> str:
     return "CRITICAL"
 
 
+def get_health_category(score: int) -> str:
+    """
+    Business-friendly category.
+    """
+
+    if score >= 90:
+        return "OPTIMAL"
+
+    if score >= 75:
+        return "GOOD"
+
+    if score >= 60:
+        return "FAIR"
+
+    return "POOR"
+
+
 def get_reliability_score(issue_count: int) -> int:
-    """
-    Reliability decreases with issue count.
-    """
 
     reliability = 100 - (issue_count * 15)
 
@@ -73,9 +81,6 @@ def get_reliability_score(issue_count: int) -> int:
 
 
 def get_recommendations(issues):
-    """
-    Generates recommendations for detected issues.
-    """
 
     mapping = {
         "Critical battery level": "Charge the device immediately.",
@@ -96,9 +101,6 @@ def get_recommendations(issues):
 
 
 def calculate_health_score(device: DeviceState) -> dict:
-    """
-    Main engine.
-    """
 
     score = 100
     issues = []
@@ -142,14 +144,13 @@ def calculate_health_score(device: DeviceState) -> dict:
     else:
         status = "CRITICAL"
 
-    reliability_score = get_reliability_score(len(issues))
-
     return {
         "timestamp": datetime.utcnow().isoformat(),
         "health_score": score,
         "health_grade": get_health_grade(score),
         "risk_level": get_risk_level(score),
-        "reliability_score": reliability_score,
+        "health_category": get_health_category(score),
+        "reliability_score": get_reliability_score(len(issues)),
         "status": status,
         "issues": issues,
         "recommendations": get_recommendations(issues)
@@ -174,6 +175,7 @@ if __name__ == "__main__":
     print(f"Timestamp         : {result['timestamp']}")
     print(f"Health Score      : {result['health_score']}")
     print(f"Health Grade      : {result['health_grade']}")
+    print(f"Health Category   : {result['health_category']}")
     print(f"Risk Level        : {result['risk_level']}")
     print(f"Reliability Score : {result['reliability_score']}")
     print(f"Status            : {result['status']}")
