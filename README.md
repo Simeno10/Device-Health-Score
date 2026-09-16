@@ -1,29 +1,40 @@
 # Device Health Score
 
-A lightweight Python-based diagnostic engine that evaluates device health and generates actionable insights based on key operational metrics.
+A lightweight Python-based diagnostic engine that evaluates device health using key operational metrics and generates actionable insights.
+
+The project is designed to provide a simple but expandable framework for assessing overall device condition and identifying potential reliability risks.
 
 ---
 
 ## Features
 
-- Health Score calculation (0-100)
-- Health Grade classification (A-F)
-- Device Risk Level assessment
-- Reliability Score calculation
-- Automatic issue detection
-- Actionable recommendations
-- Timestamped reports
-- Human-readable output
+✅ Health Score calculation (0-100)
+
+✅ Health Grade classification (A-F)
+
+✅ Device Health Category
+
+✅ Device Risk Level assessment
+
+✅ Reliability Score calculation
+
+✅ Automatic issue detection
+
+✅ Actionable recommendations
+
+✅ Timestamped reports
+
+✅ Human-readable console output
 
 ---
 
-## Metrics Evaluated
+## Health Metrics
 
-The engine evaluates:
+The engine evaluates the following device characteristics:
 
 - Battery percentage
 - Network availability
-- Available storage
+- Available storage space
 - GPS availability
 
 Each detected issue reduces the overall health score.
@@ -32,7 +43,9 @@ Each detected issue reduces the overall health score.
 
 ## Scoring Logic
 
-The device starts with a score of 100.
+The device starts with a score of **100 points**.
+
+Penalties are applied based on detected issues.
 
 | Condition | Penalty |
 |------------|----------|
@@ -47,8 +60,10 @@ The device starts with a score of 100.
 
 ## Device Status
 
-| Score | Status |
-|---------|---------|
+The score determines the device status.
+
+| Score Range | Status |
+|-------------|---------|
 | 90-100 | HEALTHY |
 | 70-89 | WARNING |
 | 0-69 | CRITICAL |
@@ -57,8 +72,10 @@ The device starts with a score of 100.
 
 ## Health Grade
 
-| Score | Grade |
-|---------|---------|
+The engine converts the numerical score into a simple letter grade.
+
+| Score Range | Grade |
+|-------------|--------|
 | 90-100 | A |
 | 80-89 | B |
 | 70-79 | C |
@@ -69,22 +86,43 @@ The device starts with a score of 100.
 
 ## Device Risk Level
 
-Risk level indicates operational urgency.
+Risk level indicates the urgency of remediation.
 
-| Score | Risk |
-|---------|---------|
+| Score Range | Risk Level |
+|-------------|------------|
 | 90-100 | LOW |
 | 70-89 | MEDIUM |
 | 50-69 | HIGH |
 | Below 50 | CRITICAL |
 
-Example:
+### Example
 
 ```json
 {
   "health_score": 82,
-  "health_grade": "B",
   "risk_level": "MEDIUM"
+}
+```
+
+---
+
+## Device Health Category
+
+Devices are grouped into business-friendly categories for easier reporting and fleet monitoring.
+
+| Score Range | Category |
+|-------------|------------|
+| 90-100 | OPTIMAL |
+| 75-89 | GOOD |
+| 60-74 | FAIR |
+| Below 60 | POOR |
+
+### Example
+
+```json
+{
+  "health_score": 78,
+  "health_category": "GOOD"
 }
 ```
 
@@ -92,10 +130,10 @@ Example:
 
 ## Reliability Score
 
-Reliability is calculated from the number of detected issues.
+Reliability is based on the number of detected issues.
 
-| Issues | Reliability Score |
-|----------|-------------------|
+| Number of Issues | Reliability Score |
+|------------------|-------------------|
 | 0 | 100 |
 | 1 | 85 |
 | 2 | 70 |
@@ -103,16 +141,24 @@ Reliability is calculated from the number of detected issues.
 | 4 | 40 |
 | 5+ | 25 or lower |
 
-A lower reliability score indicates a device more likely to experience operational issues.
+A lower reliability score indicates a higher risk of operational instability.
+
+### Example
+
+```json
+{
+  "reliability_score": 55
+}
+```
 
 ---
 
 ## Recommendations Engine
 
-Detected issues automatically generate recommendations.
+The engine automatically generates recommendations for detected issues.
 
 | Issue | Recommendation |
-|---------|----------------|
+|---------|---------------|
 | Critical battery level | Charge the device immediately |
 | Low battery level | Consider charging the device soon |
 | Network unavailable | Verify Wi-Fi or cellular connection |
@@ -126,9 +172,10 @@ Detected issues automatically generate recommendations.
 
 ```json
 {
-  "timestamp": "2026-08-26T14:20:00",
+  "timestamp": "2026-09-16T09:30:00",
   "health_score": 65,
   "health_grade": "D",
+  "health_category": "FAIR",
   "risk_level": "HIGH",
   "reliability_score": 55,
   "status": "CRITICAL",
@@ -150,7 +197,8 @@ Detected issues automatically generate recommendations.
 ## Example Usage
 
 ```python
-from health_score import DeviceState, calculate_health_score
+from health_score import DeviceState
+from health_score import calculate_health_score
 
 device = DeviceState(
     battery_percent=18,
@@ -166,24 +214,69 @@ print(result)
 
 ---
 
-## Future Improvements
+## Sample Console Report
 
-- Health trend analysis
-- CSV export
-- HTML dashboard
-- YAML configuration
-- Device fleet management
-- Web interface
-- GitHub Actions integration
-- Historical analytics
+```text
+============================================================
+DEVICE HEALTH REPORT
+============================================================
+Timestamp         : 2026-09-16T09:30:00
+Health Score      : 65
+Health Grade      : D
+Health Category   : FAIR
+Risk Level        : HIGH
+Reliability Score : 55
+Status            : CRITICAL
+
+Issues:
+ - Low battery level
+ - Low storage space
+ - GPS disabled
+
+Recommendations:
+ - Consider charging the device soon.
+ - Free additional storage space.
+ - Enable location services.
+============================================================
+```
 
 ---
 
-Architecture Overview
-├── Mobile Client
-├── Backend APIs
-├── Test Automation
-└── Release Process
+## Project Structure
+
+```text
+.
+├── health_score.py
+├── README.md
+└── requirements.txt
+```
+
+---
+
+## Future Improvements
+
+Planned enhancements:
+
+- Historical trend analysis
+- CSV export
+- JSON export module
+- HTML dashboard
+- YAML configuration support
+- Device fleet analysis
+- Health score analytics
+- GitHub Actions integration
+- REST API interface
+- Multi-device reporting
+
+---
+
+## Contributing
+
+Contributions, feature requests, and suggestions are welcome.
+
+Feel free to open an issue or submit a pull request.
+
+---
 
 ## License
 
